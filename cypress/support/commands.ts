@@ -23,3 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// support/commands.ts
+/// <reference types="cypress" />
+
+declare namespace Cypress {
+  interface Chainable {
+    origin(
+      origin: string,
+      options: { args?: any },
+      fn: (...args: any[]) => void
+    ): Chainable<void>;
+  }
+}
