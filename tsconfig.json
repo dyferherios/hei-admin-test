@@ -4,8 +4,8 @@
     "lib": ["es5", "dom"],
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],
-	"moduleResolution": "node",
-	"esModuleInterop": true
-  },
-  "include": ["**/*.ts"]
+    "moduleResolution": "node",
+    "esModuleInterop": true
+    },
+    "include": ["**/*.ts"]
 }
