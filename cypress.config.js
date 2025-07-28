@@ -5,7 +5,8 @@ dotenv.config();
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'https://preprod.admin.hei.school',
+    //! URL A VERIFIER
+    baseUrl: process.env.REACT_APP_BASE_URL,
     experimentalSessionAndOrigin: true,
     setupNodeEvents(on, config) {
       config.env = {
