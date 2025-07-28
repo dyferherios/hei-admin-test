@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
   const credentials = {
     STUDENT: {
@@ -34,12 +32,12 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
         .first()
         .type(password + "{enter}");
     }
-    
+
   );
 
 
   cy.get("h6.MuiTypography-root").should("contain.text", "Dashboard");
-  
+
 };
 
 export const importFile = (file: string, message: string, _path: string) => {
