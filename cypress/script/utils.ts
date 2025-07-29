@@ -15,7 +15,7 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
   }[role];
 
   //! URL A VERIFIER
-  cy.visit("${process.env.REACT_APP_BASE_URL}/login"); 
+  cy.visit("https://preprod.admin.hei.school }/login"); 
 
   cy.get('[data-testid="casdoor-login-btn"]').click();
 
@@ -43,10 +43,10 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
 export const importFile = (file: string, message: string, _path: string) => {
   const _mockFile = `${_path}/${file}`;
 
-  cy.getByTestid("menu-list-action").click();
+  cy.get('[data-testid="menu-list-action"]').click();
   cy.get("#import-button").click();
-  cy.getByTestid("inputFile").selectFile(_mockFile, {force: true});
-  cy.getByTestid("inputFile").selectFile(_mockFile, {force: true});
+  cy.get('[data-testid="inputFile"]').selectFile(_mockFile, {force: true});
+  cy.get('[data-testid="inputFile"]').selectFile(_mockFile, {force: true});
 
   cy.contains("Confirmer").click();
   cy.contains(message);

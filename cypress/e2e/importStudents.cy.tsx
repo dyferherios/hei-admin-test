@@ -10,7 +10,7 @@ describe("Login as a manager", () => {
 
   it("should navigate to students and check student data", () => {
   cy.visit("https://preprod.admin.hei.school/students");
-  cy.getByTestid("students-menu").click();
+  cy.get('[data-testid="students-menu"]').click();
   cy.get('[href="/students"]').click();
 });
 
