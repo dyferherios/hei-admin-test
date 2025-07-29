@@ -1,4 +1,4 @@
-import {loginAs, importFile, verifyImportedStudents} from "./../script/utils";
+import {loginAs, importFile, verifyImportedStudents} from "../script/utils";
 
 const _path = "cypress/fixtures/students_import";
 

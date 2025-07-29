@@ -1,8 +1,9 @@
 import fg from "fast-glob";
 import { fileURLToPath } from "url";
 import path from "path";
-import { getComponentIds } from "./getComponents";
-import { runCypressTests } from "./runCypressTestAndUpdateStatus";
+import { getComponentIds } from "./componentStatus/getComponents";
+import { runCypressTests } from "./componentStatus/runCypressTestAndUpdateStatus";
+import { determineStatus } from "./componentStatus/determineStatus";
 
 export const main = async () => {
   const __filename = fileURLToPath(import.meta.url);
@@ -27,18 +28,20 @@ export const main = async () => {
       console.warn("no component found")
     }
 
-    const failed = await runCypressTests(
+    const { failedTests, totalTests } = await runCypressTests(
       componentId,
       statusPageId!,
       apiKey!,
       file
     );
 
-    if (failed > 0) {
+    const status = await determineStatus(failedTests, totalTests);
+
+    if (failedTests > 0) {
       hasFailures = true;
-      console.warn(`test failed with file ${file}`)
+      console.warn(`test failed with file ${file}`);
     } else {
-     console.log(`test passed with file ${file}`)
+      console.log(`test passed with file ${file}`);
     }
   }
 
