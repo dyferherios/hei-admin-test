@@ -5,6 +5,10 @@
   "license": "ISC",
   "author": "",
   "main": "index.js",
+  "type": "module",
+  "ts-node": {
+    "esm": true
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +20,11 @@
     "cypress": "^14.5.2",
     "dotenv": "^17.2.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.3",
+    "glob": "^11.0.3"
   }
 }

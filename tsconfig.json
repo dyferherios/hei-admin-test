@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "types":["cypress"],
+    "target": "es2020",
+    "module": "esnext",
     "lib": ["es5", "dom"],
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],
