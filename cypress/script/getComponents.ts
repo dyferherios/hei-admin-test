@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 export const getComponentIds = (): Record<string, string> => {
   const env = process.env;
 
@@ -13,6 +16,5 @@ export const getComponentIds = (): Record<string, string> => {
       }
     }
   }
-
   return componentIds;
 };
