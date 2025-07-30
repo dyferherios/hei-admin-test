@@ -18,6 +18,7 @@ interface Student {
   nic?: string;
   birth_place?: string;
   coordinates?: { longitude: number; latitude: number };
+  high_school_origin?: string;
 }
 
 const formatDateToString = (date: Date | string): string => {
@@ -33,10 +34,6 @@ describe("Manager creates students", () => {
     cy.visit("https://preprod.admin.hei.school/students");
     cy.wait(2000);
     cy.contains("Liste des étudiants").should("be.visible");
-    //cy.wait(2000);
-    //cy.get('#students-table').should("be.visible");
-    //cy.get('#students-menu').click();
-    //cy.get('[href="/students"]').click(); 
   })
 
   it("should create a student manually and verify creation", () => {
@@ -55,10 +52,9 @@ describe("Manager creates students", () => {
       nic: "123456789012",
       birth_place: "Paris",
       coordinates: { longitude: 2.3522, latitude: 48.8566 },
+      high_school_origin: "LMA",
     };
 
-    //cy.get('#students-menu').click();
-    //cy.get('[href="/students"]').click(); 
     cy.get('[data-testid="menu-list-action"]').click();
     cy.get('[data-testid="create-button"]').click();
 
@@ -75,6 +71,7 @@ describe("Manager creates students", () => {
     cy.get("#birth_place").type(newStudent.birth_place!);
     cy.get('[data-testid="longitude-input"]').type(newStudent.coordinates!.longitude.toString());
     cy.get('[data-testid="latitude-input"]').type(newStudent.coordinates!.latitude.toString());
+    cy.get("#high_school_origin").type(newStudent.high_school_origin!);
 
     cy.contains("Enregistrer").click();
 
@@ -97,6 +94,7 @@ describe("Manager creates students", () => {
       nic: "567890123456",
       birth_place: "Marseille",
       coordinates: { longitude: 5.3698, latitude: 43.2965 },
+      high_school_origin: "LTA",
     };
 
     cy.get('[data-testid="menu-list-action"]').click();
@@ -111,6 +109,7 @@ describe("Manager creates students", () => {
     cy.get("#birth_place").type(liteStudent.birth_place!);
     cy.get("#longitude").type(liteStudent.coordinates!.longitude.toString());
     cy.get("#latitude").type(liteStudent.coordinates!.latitude.toString());
+    cy.get("#high_school_origin").type(liteStudent.high_school_origin);
 
     cy.contains("Enregistrer").click();
 
