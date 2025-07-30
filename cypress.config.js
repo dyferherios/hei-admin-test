@@ -4,9 +4,17 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default defineConfig({
+  viewportHeight: 1080,
+  viewportWidth: 1920,
+  defaultCommandTimeout: 25_000,
   e2e: {
     baseUrl: 'https://preprod.admin.hei.school',
     experimentalSessionAndOrigin: true,
+	pageLoadTimeout:100000,
+  },
+   retries: {
+    runMode: 4,
+    openMode: 0,
   },
   env:{
         CYPRESS_STUDENT1_PASSWORD: process.env.CYPRESS_STUDENT1_PASSWORD,
