@@ -38,7 +38,7 @@ describe("Manager creates students", () => {
 
   it("should create a student manually and verify creation", () => {
     const newStudent: Student = {
-      ref: "STD000080", 
+      ref: "G-80", 
       first_name: "Marie",
       last_name: "Dupont",
       sex: "F",
@@ -46,7 +46,7 @@ describe("Manager creates students", () => {
       birth_date: "1995-05-15",
       address: "123 Rue Exemple, Paris",
       phone: "+33612345678",
-      email: `marie.dupont@hei.school`,
+      email: `marie.dupont@hei.com`,
       entrance_datetime: "2025-07-29",
       status: "ENABLED",
       nic: "123456789012",
@@ -84,10 +84,10 @@ describe("Manager creates students", () => {
 
   it("should create a lite student and verify creation", () => {
     const liteStudent: Student = {
-      ref: "STD000060",
+      ref: "G-60",
       first_name: "Sophie",
       last_name: "Leroy",
-      email: `sophie.leroy@hei.school`,
+      email: `sophie.leroy@hei.com`,
       entrance_datetime: "2025-07-29",
       specialization_field: "COMMON_CORE",
       status: "ENABLED",
@@ -107,8 +107,8 @@ describe("Manager creates students", () => {
     cy.get("#entrance_datetime").click().type(formatDateToString(liteStudent.entrance_datetime));
     cy.get("#nic").type(liteStudent.nic!);
     cy.get("#birth_place").type(liteStudent.birth_place!);
-    cy.get("#longitude").type(liteStudent.coordinates!.longitude.toString());
-    cy.get("#latitude").type(liteStudent.coordinates!.latitude.toString());
+    cy.get('[data-testid="longitude-input"]').type(liteStudent.coordinates!.longitude.toString());
+    cy.get('[data-testid="latitude-input"]').type(liteStudent.coordinates!.latitude.toString());
     cy.get("#high_school_origin").type(liteStudent.high_school_origin);
 
     cy.contains("Enregistrer").click();
