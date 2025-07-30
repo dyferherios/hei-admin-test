@@ -38,18 +38,18 @@ describe("Manager creates students", () => {
 
   it("should create a student manually and verify creation", () => {
     const newStudent: Student = {
-      ref: "G-80", 
-      first_name: "Marie",
+      ref: "N-100", 
+      first_name: "Mary",
       last_name: "Dupont",
       sex: "F",
       specialization_field: "COMMON_CORE",
       birth_date: "1995-05-15",
       address: "123 Rue Exemple, Paris",
-      phone: "+33612345678",
-      email: `marie.dupont@hei.com`,
+      phone: "+261 234 1779",
+      email: `mary.dupont@hei.com`,
       entrance_datetime: "2025-07-29",
       status: "ENABLED",
-      nic: "123456789012",
+      nic: "123456444012",
       birth_place: "Paris",
       coordinates: { longitude: 2.3522, latitude: 48.8566 },
       high_school_origin: "LMA",
@@ -78,6 +78,8 @@ describe("Manager creates students", () => {
     cy.wait(4000);
 
     cy.contains("Élément créé").should("be.visible");
+    cy.get('[data-testid="students-menu"]').click(); // Étudiants category
+    cy.get('[href="/students"]').click();
 
     cy.get('[data-testid="students-table"]').contains(newStudent.ref).should("be.visible");
   });
@@ -114,6 +116,8 @@ describe("Manager creates students", () => {
     cy.contains("Enregistrer").click();
 
     cy.contains("Élément créé").should("be.visible");
+    cy.get('[data-testid="students-menu"]').click(); // Étudiants category
+    cy.get('[href="/students"]').click();
 
     cy.get('[data-testid="students-table"]').contains(liteStudent.ref).should("be.visible");
   });
