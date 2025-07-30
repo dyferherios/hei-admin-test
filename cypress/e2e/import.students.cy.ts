@@ -27,16 +27,17 @@ const formatDateToString = (date: Date | string): string => {
 
 describe("Manager creates students", () => {
 
-  it("should navigate to students and check student data", () => {
+  beforeEach(() => {
     loginAs("MANAGER");
     cy.wait(2000);
     cy.visit("https://preprod.admin.hei.school/students");
     cy.wait(2000);
     cy.contains("Liste des étudiants").should("be.visible");
-    /* cy.get('[data-testid="students-table"]').should("be.visible");
-    cy.get('[data-testid="students-menu"]').click();
-    cy.get('[href="/students"]').click(); */
-  });
+    //cy.wait(2000);
+    //cy.get('#students-table').should("be.visible");
+    //cy.get('#students-menu').click();
+    //cy.get('[href="/students"]').click(); 
+  })
 
   it("should create a student manually and verify creation", () => {
     const newStudent: Student = {
@@ -56,6 +57,8 @@ describe("Manager creates students", () => {
       coordinates: { longitude: 2.3522, latitude: 48.8566 },
     };
 
+    //cy.get('#students-menu').click();
+    //cy.get('[href="/students"]').click(); 
     cy.get('[data-testid="menu-list-action"]').click();
     cy.get('[data-testid="create-button"]').click();
 
@@ -70,9 +73,12 @@ describe("Manager creates students", () => {
     cy.get("#entrance_datetime").click().type(formatDateToString(newStudent.entrance_datetime));
     cy.get("#nic").type(newStudent.nic!);
     cy.get("#birth_place").type(newStudent.birth_place!);
-    cy.get("#longitude").type(newStudent.coordinates!.longitude.toString());
-    cy.get("#latitude").type(newStudent.coordinates!.latitude.toString());
+    cy.get('[data-testid="longitude-input"]').type(newStudent.coordinates!.longitude.toString());
+    cy.get('[data-testid="latitude-input"]').type(newStudent.coordinates!.latitude.toString());
+
     cy.contains("Enregistrer").click();
+
+    cy.wait(4000);
 
     cy.contains("Élément créé").should("be.visible");
 
@@ -93,8 +99,8 @@ describe("Manager creates students", () => {
       coordinates: { longitude: 5.3698, latitude: 43.2965 },
     };
 
-    cy.get("#menu-list-action").click();
-    cy.get("#create-button").click();
+    cy.get('[data-testid="menu-list-action"]').click();
+    cy.get('[data-testid="create-button"]').click();
 
     cy.get("#ref").type(liteStudent.ref);
     cy.get("#first_name").type(liteStudent.first_name);
@@ -110,7 +116,7 @@ describe("Manager creates students", () => {
 
     cy.contains("Élément créé").should("be.visible");
 
-    cy.get("#students-table").contains(liteStudent.ref).should("be.visible");
+    cy.get('[data-testid="students-table"]').contains(liteStudent.ref).should("be.visible");
   });
 
   it("should successfully import students with a valid Excel file", () => {
@@ -127,9 +133,9 @@ describe("Manager creates students", () => {
 
     importFile(filePath, "Importation effectuée avec succès", "cypress/fixtures/students_import");
 
-    cy.get("#students-table").should("be.visible");
+    cy.get('[data-testid="students-table"]').should("be.visible");
     expectedRefs.forEach((ref) => {
-      cy.get("#students-table").contains(ref).should("be.visible");
+      cy.get('[data-testid="students-table"]').contains(ref).should("be.visible");
     });
   });
 
@@ -138,8 +144,8 @@ describe("Manager creates students", () => {
 
     importFile(filePath, "Il n'y a pas d'élément à insérer", "cypress/fixtures/students_import");
 
-    cy.get("#students-table").should("be.visible");
-    cy.get("#students-table").contains("STD000001").should("not.exist");
+    cy.get('[data-testid="students-table"]').should("be.visible");
+    cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
   });
 
   it("should fail to import students with incorrect headers in Excel file", () => {
@@ -147,8 +153,8 @@ describe("Manager creates students", () => {
 
     importFile(filePath, "Veuillez re-vérifier les en-têtes de votre fichier", "cypress/fixtures/students_import");
 
-    cy.get("#students-table").should("be.visible");
-    cy.get("#students-table").contains("STD000001").should("not.exist");
+    cy.get('[data-testid="students-table"]').should("be.visible");
+    cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
   });
 
   it("should fail to import students with too many entries in Excel file", () => {
@@ -156,7 +162,7 @@ describe("Manager creates students", () => {
 
     importFile(filePath, "Vous ne pouvez importer que 20 éléments à la fois.", "cypress/fixtures/students_import");
 
-    cy.get("#students-table").should("be.visible");
-    cy.get("#students-table").contains("STD000001").should("not.exist");
+    cy.get('[data-testid="students-table"]').should("be.visible");
+    cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
   });
 });
