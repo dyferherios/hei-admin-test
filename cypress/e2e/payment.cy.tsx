@@ -6,7 +6,9 @@ describe("Fees Management Workflow", () => {
   const transactionRef = "MP240731.1518.B11223";
 
   beforeEach(() => {
-    cy.clearCookies();
+    cy.clearAllCookies();
+    cy.clearAllLocalStorage();
+    cy.clearAllSessionStorage();
   });
 
   it("Allows a Manager to add a fee, a Student to confirm it, and then cleans up", () => {
@@ -29,6 +31,9 @@ describe("Fees Management Workflow", () => {
     cy.get("#due_datetime").type(feeDueDate);
     cy.contains("Enregistrer").click();
 
+    cy.clearAllCookies();
+    cy.clearAllLocalStorage();
+    cy.clearAllSessionStorage();
     // 2. Log in as Student and confirm the added fee
     loginAs("STUDENT");
     cy.contains("Frais").click();
@@ -48,9 +53,12 @@ describe("Fees Management Workflow", () => {
       .type(transactionRef);
 
     cy.contains("button", "Enregistrer").should("be.enabled").click();
-    // cy.contains("Paiement enregistré avec succès").should("be.visible");
 
     // 3. Log back in as Manager and delete the previously created fee (cleanup)
+    cy.clearAllCookies();
+    cy.clearAllLocalStorage();
+    cy.clearAllSessionStorage();
+
     loginAs("MANAGER");
     cy.contains("Étudiants").click();
     cy.contains("Liste des étudiants").click();
