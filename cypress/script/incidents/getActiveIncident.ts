@@ -3,25 +3,7 @@ export async function getActiveIncident(
   API_KEY: string,
   COMPONENT_ID: string
 ) {
-  // const res = await fetch(`${INCIDENT_API_URL}?status=INVESTIGATING`, {
-  //   headers: {
-  //     Authorization: `Bearer ${API_KEY}`,
-  //   },
-  // });
-
-  // console.log("url : " + INCIDENT_API_URL);
-  
-
-  // if (!res.ok) {
-  //   throw new Error("Erreur lors de la récupération des incidents");
-  // }
-
-  // const { data } = await res.json();
-  // return data.find((incident: { components: any[] }) =>
-  //   incident.components?.some((c) => c.id === COMPONENT_ID)
-  // );
-
- const res = await fetch(`${INCIDENT_API_URL}?status=INVESTIGATING`, {
+   const res = await fetch(`${INCIDENT_API_URL}?status=INVESTIGATING`, {
    headers: {
      Authorization: `Bearer ${API_KEY}`,
    },
