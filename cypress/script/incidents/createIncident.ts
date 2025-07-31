@@ -13,7 +13,7 @@ export async function createIncident(INCIDENT_API_URL: string, API_KEY:string, C
     },
     body: JSON.stringify({
       name: `Incident détecté - ${STATUS}`,
-      message: `Composant ${COMPONENT_ID} affecté avec le statut ${STATUS}.`,
+      message: `Composant affecté avec le statut ${STATUS}.`,
       components: [COMPONENT_ID],
       status: "INVESTIGATING",
       notify: true,
