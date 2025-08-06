@@ -17,6 +17,8 @@ export async function handleIncident(
     API_KEY,
     COMPONENT_ID
   );
+  console.log("Current status:", status);
+  console.log("All incidents:", incident);
 
   if (status !== "OPERATIONAL") {
     if (incident) {

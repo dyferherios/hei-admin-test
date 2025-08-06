@@ -19,7 +19,7 @@ describe("attendance test", () => {
 
     // Vérification du message de confirmation
     cy.get('.css-1w0ym84').should("contain.text", "Enregistrer avec succès.");
-    
+
      // Marquer tous les élèves comme "UNCHECKED"
     cy.get('div[data-testid="UNCHECKED"]').each(($el) => {
       cy.wrap($el).should("be.visible").click();

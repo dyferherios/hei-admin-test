@@ -2,9 +2,7 @@ name: Run Tests
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ tsong ]
   schedule:
     - cron: "0 6 * * *"
     - cron: "0 14 * * *"
@@ -30,37 +28,35 @@ env:
 jobs: 
   CI:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Setup node
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.19.0
+          node-version: '20'
 
-      ## Connect to Numer Private Codeartifact Repository ##
-      - name: Configure prod AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.0.1
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ts-node globally
+        run: npm install -g ts-node typescript
+
+      - name: Run Cypress tests
+        run:  npm run test
+
+      - name: Upload Cypress screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.REACT_APP_AWS_REGION }}
-      - run: sh ./initNpmrc.sh hei-store npm-hei-school 088312068315
+          name: cypress-screenshots
+          path: cypress/screenshots
 
-      ## Connect to Numer Private Codeartifact Repository ##
-      - name: Configure preprod AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.0.1
+      - name: Upload Cypress videos
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          aws-access-key-id: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PREPROD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.REACT_APP_AWS_REGION }}
-          unset-current-credentials: true
-      - run: sh ./initNpmrc.sh hei-store npm-hei-lab 057045785189
-
-      ## Install npm dependencies ##
-      - name: Install npm dependencies
-        run: npm install
-
-      ## Run prettier to check code style ##
-      - name: run test e2e
-        run: npm run test
+          name: cypress-videos
+          path: cypress/videos
