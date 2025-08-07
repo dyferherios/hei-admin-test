@@ -52,3 +52,8 @@ export const importFile = (file: string, message: string, _path: string) => {
   cy.contains(message).should("be.visible");
 };
 
+export const formatDateToString = (date: Date | string): string => {
+  if (typeof date === "string") return date;
+  return date.toISOString().slice(0, 10);
+};
+
