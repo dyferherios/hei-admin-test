@@ -1,0 +1,51 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: "0 6 * * *"
+    - cron: "0 14 * * *"
+    - cron: "0 22 * * *"
+
+env:
+  REACT_APP_TEST_STUDENT1_PASSWORD: ${{ secrets.STUDENT1_PASSWORD }}
+  REACT_APP_TEST_TEACHER1_PASSWORD: ${{ secrets.TEACHER1_PASSWORD }}
+  REACT_APP_TEST_MANAGER1_PASSWORD: ${{ secrets.MANAGER1_PASSWORD }}
+
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ts-node globally
+        run: npm install -g ts-node typescript
+
+      - name: Run Cypress tests
+        run:  npm run test
+
+      - name: Upload Cypress screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload Cypress videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
