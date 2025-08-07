@@ -2,7 +2,8 @@
 import {loginAs, importFile, formatDateToString} from "../script/utils";
 
 const _path = "cypress/fixtures/students_import";
-let std = 710;
+const getRandomStd = () => Math.floor(Math.random() * 900) + 100; 
+let std = getRandomStd();
 const firstNames = [ "Lucas", "Emma"];
 let nameIndex = 0;
 
