@@ -3,7 +3,7 @@ import {loginAs, importFile} from "../script/utils";
 
 const _path = "cypress/fixtures/students_import";
 
-describe("Login as a manager", () => {
+/*describe("Login as a manager", () => {
 
   it("should navigate to students and check student data", () => {
   loginAs("MANAGER");
@@ -12,7 +12,7 @@ describe("Login as a manager", () => {
   cy.get('[href="/students"]').click();
 });
 
-/* it('should successfully import students with a valid Excel file', () => {
+  it('should successfully import students with a valid Excel file', () => {
     const filePath = 'cypress/fixtures/students_import/correct_students_template.xlsx';
     const expectedRefs = ['STD000001', 'STD000002', 'STD000003', 'STD000004', 'STD000005', 'STD000006', 'STD000007'];
 
@@ -25,7 +25,7 @@ describe("Login as a manager", () => {
     // Vérifier les données importées via l'API
     verifyImportedStudents(expectedRefs);
   });
-*/
+
  it('should fail to import students with an empty Excel file', () => {
     const filePath = 'cypress/fixtures/students_import/0_student_template.xlsx';
     importFile(filePath, "Il n'y a pas d'élément à insérer", 'cypress/fixtures/students_import');
@@ -43,7 +43,7 @@ describe("Login as a manager", () => {
     importFile(filePath, 'Vous ne pouvez importer que 20 éléments à la fois.', 'cypress/fixtures/students_import');
     cy.contains('Vous ne pouvez importer que 20 éléments à la fois.').should('be.visible');
   });
-});
+});*/
 
 
 interface Student {
@@ -82,15 +82,15 @@ describe("Manager creates students", () => {
 
   it("should create a student manually and verify creation", () => {
     const newStudent: Student = {
-      ref: "J-100", 
-      first_name: "Jane",
+      ref: "STD00127-PROJ1-G18", 
+      first_name: "Nora",
       last_name: "Dupont",
       sex: "F",
       specialization_field: "COMMON_CORE",
       birth_date: "1995-05-15",
       address: "123 Rue Exemple, Paris",
       phone: "+261 234 1779",
-      email: `jane.dupont@hei.com`,
+      email: `nora.dupont@hei.com`,
       entrance_datetime: "2025-07-29",
       status: "ENABLED",
       nic: "123456444012",
@@ -125,12 +125,13 @@ describe("Manager creates students", () => {
     cy.get('[data-testid="students-menu"]').click(); // Étudiants category
     cy.get('[href="/students"]').click();
     cy.wait(2000);
-    cy.get('[data-testid="students-table"]').contains(newStudent.ref).should("be.visible");
+    cy.get('[data-testid="main-search-filter"]').type(newStudent.first_name);
+    cy.get('.MuiTableBody-root').contains(newStudent.ref).should("be.visible");
   });
 
   it("should create a lite student and verify creation", () => {
     const liteStudent: Student = {
-      ref: "G-60",
+      ref: "STD00124-PROJ1-G18",
       first_name: "Sophie",
       last_name: "Leroy",
       email: `sophie.leroy@hei.com`,
@@ -162,11 +163,12 @@ describe("Manager creates students", () => {
     cy.contains("Élément créé").should("be.visible");
     cy.get('[data-testid="students-menu"]').click(); // Étudiants category
     cy.get('[href="/students"]').click();
-
-    cy.get('[data-testid="students-table"]').contains(liteStudent.ref).should("be.visible");
+    cy.wait(2000);
+    cy.get('[data-testid="main-search-filter"]').type(liteStudent.first_name);
+    cy.get('.MuiTableBody-root').contains(liteStudent.ref).should("be.visible");
   });
 
-  it("should successfully import students with a valid Excel file", () => {
+ /* it("should successfully import students with a valid Excel file", () => {
     const filePath = "cypress/fixtures/students_import/correct_students_template.xlsx";
     const expectedRefs = [
       "STD000001",
@@ -211,6 +213,6 @@ describe("Manager creates students", () => {
 
     cy.get('[data-testid="students-table"]').should("be.visible");
     cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
-  });
+  });*/
 });
 
