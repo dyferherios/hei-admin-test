@@ -1,7 +1,7 @@
 import { loginAs } from "../script/utils";
 
 describe("authentification test", () => {
-	it("connect as a admin", () => {
+	it("connect as an admin", () => {
 		loginAs("ADMIN");
 	}),
 	it("connect as a teacher", () => {
