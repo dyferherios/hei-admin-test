@@ -1,5 +1,5 @@
 import { run as _run } from "cypress";
-import { updateInstatusStatus } from "./upadateInstatus";
+import { updateInstatusStatus } from "./updateInstatus";
 import { determineStatus } from "./determineStatus";
 
 export const runCypressTests = async (
