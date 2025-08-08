@@ -3,29 +3,29 @@ export async function getActiveIncident(
   API_KEY: string,
   COMPONENT_ID: string
 ) {
-   const res = await fetch(`${INCIDENT_API_URL}?status=INVESTIGATING`, {
-   headers: {
-     Authorization: `Bearer ${API_KEY}`,
-   },
- });
+  const res = await fetch(`${INCIDENT_API_URL}?status=INVESTIGATING`, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  });
 
- if (!res.ok) {
-   const errorText = await res.text();
-   throw new Error(
-     `Erreur lors de la récupération des incidents: ${errorText}`
-   );
- }
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(
+      `Error while recuperating incidents: ${errorText}`
+    );
+  }
 
   const resData = await res.json();
-  
 
- if (!Array.isArray(resData)) {
-   throw new Error(
-     "Format de réponse inattendu : réponse n’est pas un tableau"
-   );
- }
 
- return resData.find((incident: any) =>
-   incident.components?.some((comp: any) => comp.id === COMPONENT_ID)
- );
+  if (!Array.isArray(resData)) {
+    throw new Error(
+      "Response format doesn't expected : response isn't a table"
+    );
+  }
+
+  return resData.find((incident: any) =>
+    incident.components?.some((comp: any) => comp.id === COMPONENT_ID)
+  );
 }

@@ -1,4 +1,4 @@
-export async function resolveIncident(INCIDENT_ID:string,INCIDENT_API_URL:string,API_KEY:string, COMPONENT_ID: string ) {
+export async function resolveIncident(INCIDENT_ID: string, INCIDENT_API_URL: string, API_KEY: string, COMPONENT_ID: string) {
   const res = await fetch(`${INCIDENT_API_URL}/${INCIDENT_ID}/incident-updates`, {
     method: "POST",
     headers: {
@@ -10,7 +10,7 @@ export async function resolveIncident(INCIDENT_ID:string,INCIDENT_API_URL:string
       components: [COMPONENT_ID],
       status: "RESOLVED",
       notify: true,
-	  started: new Date().toISOString(),
+      started: new Date().toISOString(),
       statuses: [
         {
           id: COMPONENT_ID,
@@ -22,7 +22,7 @@ export async function resolveIncident(INCIDENT_ID:string,INCIDENT_API_URL:string
 
   if (!res.ok) {
     const errorText = await res.text();
-    throw new Error(`Erreur résolution incident : ${errorText}`);
+    throw new Error(`Error while resolving incident : ${errorText}`);
   }
 
   return await res.json();
