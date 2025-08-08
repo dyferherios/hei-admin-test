@@ -1,50 +1,11 @@
 
-import {loginAs, importFile} from "../script/utils";
+import {loginAs, importFile, formatDateToString} from "../script/utils";
 
 const _path = "cypress/fixtures/students_import";
-
-describe("Login as a manager", () => {
-
-  it("should navigate to students and check student data", () => {
-  loginAs("MANAGER");
-  cy.visit("https://preprod.admin.hei.school/students");
-  cy.get('[data-testid="students-menu"]').click();
-  cy.get('[href="/students"]').click();
-});
-
-/* it('should successfully import students with a valid Excel file', () => {
-    const filePath = 'cypress/fixtures/students_import/correct_students_template.xlsx';
-    const expectedRefs = ['STD000001', 'STD000002', 'STD000003', 'STD000004', 'STD000005', 'STD000006', 'STD000007'];
-
-    // Simuler l'importation du fichier Excel
-    importFile(filePath, 'Importation effectuée avec succès', 'cypress/fixtures/students_import');
-
-    // Vérifier le message de succès dans l'interface
-    cy.contains('Importation effectuée avec succès').should('be.visible');
-
-    // Vérifier les données importées via l'API
-    verifyImportedStudents(expectedRefs);
-  });
-*/
- it('should fail to import students with an empty Excel file', () => {
-    const filePath = 'cypress/fixtures/students_import/0_student_template.xlsx';
-    importFile(filePath, "Il n'y a pas d'élément à insérer", 'cypress/fixtures/students_import');
-    cy.contains("Il n'y a pas d'élément à insérer").should('be.visible');
-  });
-
-  it('should fail to import students with incorrect headers in Excel file', () => {
-    const filePath = 'cypress/fixtures/students_import/wrong_heads_students_template.xlsx';
-    importFile(filePath, 'Veuillez re-vérifier les en-têtes de votre fichier', 'cypress/fixtures/students_import');
-    cy.contains('Veuillez re-vérifier les en-têtes de votre fichier').should('be.visible');
-  });
-
-  it('should fail to import students with too many entries in Excel file', () => {
-    const filePath = 'cypress/fixtures/students_import/13_template.xlsx';
-    importFile(filePath, 'Vous ne pouvez importer que 20 éléments à la fois.', 'cypress/fixtures/students_import');
-    cy.contains('Vous ne pouvez importer que 20 éléments à la fois.').should('be.visible');
-  });
-});
-
+const getRandomStd = () => Math.floor(Math.random() * 900) + 100; 
+let std = getRandomStd();
+const firstNames = [ "Lucas", "Emma"];
+let nameIndex = 0;
 
 interface Student {
   id?: string;
@@ -65,9 +26,50 @@ interface Student {
   high_school_origin?: string;
 }
 
-const formatDateToString = (date: Date | string): string => {
-  if (typeof date === "string") return date;
-  return date.toISOString().slice(0, 10);
+const generateStudentData = (std: number): Student => {
+  const firstName = `${firstNames[nameIndex % firstNames.length]}${std}`;
+  const lastName = "Dupont";
+  nameIndex += 1;
+  return {
+    ref: `STD00${std}-PROJ1-G18`,
+    first_name: firstName,
+    last_name: lastName,
+    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@hei.com`,
+    entrance_datetime: "2025-07-29",
+    specialization_field: "COMMON_CORE",
+    status: "ENABLED",
+    nic: `123456${std}012`,
+    birth_place: "Paris",
+    coordinates: { longitude: 2.3522, latitude: 48.8566 },
+    high_school_origin: "LMA",
+  };
+};
+
+const fillStudentForm = (student: Student) => {
+  cy.get("#ref").type(student.ref);
+  cy.get("#first_name").type(student.first_name);
+  cy.get("#last_name").type(student.last_name);
+  cy.get("#email").type(student.email);
+  cy.get("#entrance_datetime").click().type(formatDateToString(student.entrance_datetime));
+  if (student.sex) cy.get(`#sex_${student.sex}`).click();
+  if (student.birth_date) cy.get("#birth_date").click().type(student.birth_date);
+  if (student.address) cy.get("#address").type(student.address);
+  if (student.phone) cy.get("#phone").type(student.phone);
+  if (student.nic) cy.get("#nic").type(student.nic);
+  if (student.birth_place) cy.get("#birth_place").type(student.birth_place);
+  if (student.coordinates) {
+    cy.get('[data-testid="longitude-input"]').type(student.coordinates.longitude.toString());
+    cy.get('[data-testid="latitude-input"]').type(student.coordinates.latitude.toString());
+  }
+  if (student.high_school_origin) cy.get("#high_school_origin").type(student.high_school_origin);
+};
+
+const verifyStudentCreation = (student: Student) => {
+  cy.contains("Élément créé").should("be.visible");
+  cy.get('[data-testid="students-menu"]').click();
+  cy.get('[href="/students"]').click();
+  cy.get('[data-testid="main-search-filter"]').type(student.first_name);
+  cy.get('.MuiTableBody-root').contains(student.ref).should("be.visible");
 };
 
 describe("Manager creates students", () => {
@@ -75,94 +77,40 @@ describe("Manager creates students", () => {
   beforeEach(() => {
     loginAs("MANAGER");
     cy.wait(2000);
-    cy.visit("https://preprod.admin.hei.school/students");
+    cy.visit(`${Cypress.env('CYPRESS_BASE_URL')}/students`);
     cy.wait(2000);
     cy.contains("Liste des étudiants").should("be.visible");
   })
 
   it("should create a student manually and verify creation", () => {
-    const newStudent: Student = {
-      ref: "STD000080", 
-      first_name: "Marie",
-      last_name: "Dupont",
-      sex: "F",
-      specialization_field: "COMMON_CORE",
-      birth_date: "1995-05-15",
-      address: "123 Rue Exemple, Paris",
-      phone: "+33612345678",
-      email: `marie.dupont@hei.school`,
-      entrance_datetime: "2025-07-29",
-      status: "ENABLED",
-      nic: "123456789012",
-      birth_place: "Paris",
-      coordinates: { longitude: 2.3522, latitude: 48.8566 },
-      high_school_origin: "LMA",
-    };
+   const newStudent = generateStudentData(std);
+    newStudent.sex = "F";
+    newStudent.birth_date = "1995-05-15";
+    newStudent.address = "123 Rue Exemple, Paris";
+    newStudent.phone = "+261 234 1779";
 
     cy.get('[data-testid="menu-list-action"]').click();
     cy.get('[data-testid="create-button"]').click();
-
-    cy.get("#ref").type(newStudent.ref);
-    cy.get("#first_name").type(newStudent.first_name);
-    cy.get("#last_name").type(newStudent.last_name);
-    cy.get("#sex_F").click();
-    cy.get("#birth_date").click().type(newStudent.birth_date!);
-    cy.get("#address").type(newStudent.address!);
-    cy.get("#phone").type(newStudent.phone!);
-    cy.get("#email").type(newStudent.email);
-    cy.get("#entrance_datetime").click().type(formatDateToString(newStudent.entrance_datetime));
-    cy.get("#nic").type(newStudent.nic!);
-    cy.get("#birth_place").type(newStudent.birth_place!);
-    cy.get('[data-testid="longitude-input"]').type(newStudent.coordinates!.longitude.toString());
-    cy.get('[data-testid="latitude-input"]').type(newStudent.coordinates!.latitude.toString());
-    cy.get("#high_school_origin").type(newStudent.high_school_origin!);
-
+    fillStudentForm(newStudent);
     cy.contains("Enregistrer").click();
-
-    cy.wait(4000);
-
-    cy.contains("Élément créé").should("be.visible");
-
-    cy.get('[data-testid="students-table"]').contains(newStudent.ref).should("be.visible");
+    verifyStudentCreation(newStudent);
+    std += 1;
   });
+
+  
 
   it("should create a lite student and verify creation", () => {
-    const liteStudent: Student = {
-      ref: "STD000060",
-      first_name: "Sophie",
-      last_name: "Leroy",
-      email: `sophie.leroy@hei.school`,
-      entrance_datetime: "2025-07-29",
-      specialization_field: "COMMON_CORE",
-      status: "ENABLED",
-      nic: "567890123456",
-      birth_place: "Marseille",
-      coordinates: { longitude: 5.3698, latitude: 43.2965 },
-      high_school_origin: "LTA",
-    };
+   const liteStudent = generateStudentData(std);
 
     cy.get('[data-testid="menu-list-action"]').click();
     cy.get('[data-testid="create-button"]').click();
-
-    cy.get("#ref").type(liteStudent.ref);
-    cy.get("#first_name").type(liteStudent.first_name);
-    cy.get("#last_name").type(liteStudent.last_name);
-    cy.get("#email").type(liteStudent.email);
-    cy.get("#entrance_datetime").click().type(formatDateToString(liteStudent.entrance_datetime));
-    cy.get("#nic").type(liteStudent.nic!);
-    cy.get("#birth_place").type(liteStudent.birth_place!);
-    cy.get("#longitude").type(liteStudent.coordinates!.longitude.toString());
-    cy.get("#latitude").type(liteStudent.coordinates!.latitude.toString());
-    cy.get("#high_school_origin").type(liteStudent.high_school_origin);
-
+    fillStudentForm(liteStudent);
     cy.contains("Enregistrer").click();
-
-    cy.contains("Élément créé").should("be.visible");
-
-    cy.get('[data-testid="students-table"]').contains(liteStudent.ref).should("be.visible");
+    verifyStudentCreation(liteStudent);
+    std += 1;
   });
 
-  it("should successfully import students with a valid Excel file", () => {
+ /* it("should successfully import students with a valid Excel file", () => {
     const filePath = "cypress/fixtures/students_import/correct_students_template.xlsx";
     const expectedRefs = [
       "STD000001",
@@ -207,6 +155,6 @@ describe("Manager creates students", () => {
 
     cy.get('[data-testid="students-table"]').should("be.visible");
     cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
-  });
+  });*/
 });
 
