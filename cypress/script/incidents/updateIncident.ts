@@ -1,4 +1,4 @@
-export async function updateIncident(INCIDENT_ID: any, INCIDENT_API_URL: string, API_KEY:string, COMPONENT_ID: any, STATUS: any) {
+export async function updateIncident(INCIDENT_ID: any, INCIDENT_API_URL: string, API_KEY: string, COMPONENT_ID: any, STATUS: any) {
   const res = await fetch(`${INCIDENT_API_URL}/${INCIDENT_ID}/incident-updates`, {
     method: "POST",
     headers: {
@@ -10,7 +10,7 @@ export async function updateIncident(INCIDENT_ID: any, INCIDENT_API_URL: string,
       components: [COMPONENT_ID],
       status: "INVESTIGATING",
       notify: true,
-		started: new Date().toISOString(),
+      started: new Date().toISOString(),
       statuses: [
         {
           id: COMPONENT_ID,
@@ -22,7 +22,7 @@ export async function updateIncident(INCIDENT_ID: any, INCIDENT_API_URL: string,
 
   if (!res.ok) {
     const errorText = await res.text();
-    throw new Error(`Erreur mise à jour incident : ${errorText}`);
+    throw new Error(`Error update incident : ${errorText}`);
   }
 
   return await res.json();
