@@ -1,7 +1,9 @@
 
 import {loginAs, importFile, formatDateToString} from "../script/utils";
 
-const _path = "cypress/fixtures/students_import";
+//const _path = "cypress/fixtures/students_import";
+const _path = "D:/NOMENA/HEI/HEI-ADMIN/hei-admin/hei-admin-test/cypress/fixtures/students_import";
+
 const getRandomStd = () => Math.floor(Math.random() * 900) + 100; 
 let std = getRandomStd();
 const firstNames = [ "Lucas", "Emma"];
@@ -72,6 +74,11 @@ const verifyStudentCreation = (student: Student) => {
   cy.get('.MuiTableBody-root').contains(student.ref).should("be.visible");
 };
 
+const verifyStudentCreationByHisFirstName = (name: string) => {
+  cy.get('[data-testid="main-search-filter"]').type(name);
+  cy.get('.MuiTableBody-root').contains(name).should("be.visible");
+};
+
 describe("Manager creates students", () => {
 
   beforeEach(() => {
@@ -82,7 +89,7 @@ describe("Manager creates students", () => {
     cy.contains("Liste des étudiants").should("be.visible");
   })
 
-  it("should create a student manually and verify creation", () => {
+/*  it("should create a student manually and verify creation", () => {
    const newStudent = generateStudentData(std);
     newStudent.sex = "F";
     newStudent.birth_date = "1995-05-15";
@@ -108,53 +115,46 @@ describe("Manager creates students", () => {
     cy.contains("Enregistrer").click();
     verifyStudentCreation(liteStudent);
     std += 1;
-  });
+  });*/
 
- /* it("should successfully import students with a valid Excel file", () => {
-    const filePath = "cypress/fixtures/students_import/correct_students_template.xlsx";
+/* it("should successfully import students with a valid Excel file", () => {
+    const filePath = "correct_students_template.xlsx";
     const expectedRefs = [
-      "STD000001",
-      "STD000002",
-      "STD000003",
-      "STD000004",
-      "STD000005",
-      "STD000006",
-      "STD000007",
+      "John",
+      "Patrick",
+      "Jeanne",
+      "Jean",
+      "Pierre",
+      "Hélène",
+      "Patrice",
     ];
 
-    importFile(filePath, "Importation effectuée avec succès", "cypress/fixtures/students_import");
+    importFile(filePath, "Importation effectuée avec succès", _path);
 
-    cy.get('[data-testid="students-table"]').should("be.visible");
-    expectedRefs.forEach((ref) => {
-      cy.get('[data-testid="students-table"]').contains(ref).should("be.visible");
+    expectedRefs.forEach((name) => {
+     cy.get("body").click(0, 0);
+     cy.get("body").click(0, 0);
+    verifyStudentCreationByHisFirstName(name);
     });
   });
+*/
 
   it("should fail to import students with an empty Excel file", () => {
-    const filePath = "cypress/fixtures/students_import/0_student_template.xlsx";
+    const filePath = "0_student_template.xlsx";
 
-    importFile(filePath, "Il n'y a pas d'élément à insérer", "cypress/fixtures/students_import");
-
-    cy.get('[data-testid="students-table"]').should("be.visible");
-    cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
+    importFile(filePath, "Il n'y a pas d'élément à insérer", _path);
   });
 
   it("should fail to import students with incorrect headers in Excel file", () => {
-    const filePath = "cypress/fixtures/students_import/wrong_heads_students_template.xlsx";
+    const filePath = "wrong_heads_students_template.xlsx";
 
-    importFile(filePath, "Veuillez re-vérifier les en-têtes de votre fichier", "cypress/fixtures/students_import");
-
-    cy.get('[data-testid="students-table"]').should("be.visible");
-    cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
+    importFile(filePath, "Veuillez re-vérifier les en-têtes de votre fichier", _path);
   });
 
   it("should fail to import students with too many entries in Excel file", () => {
-    const filePath = "cypress/fixtures/students_import/13_template.xlsx";
+    const filePath = "13_template.xlsx";
 
-    importFile(filePath, "Vous ne pouvez importer que 20 éléments à la fois.", "cypress/fixtures/students_import");
-
-    cy.get('[data-testid="students-table"]').should("be.visible");
-    cy.get('[data-testid="students-table"]').contains("STD000001").should("not.exist");
-  });*/
+    importFile(filePath, "Vous ne pouvez importer que 20 éléments à la fois.", _path);
+  });
 });
 

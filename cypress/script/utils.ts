@@ -43,12 +43,10 @@ export const importFile = (file: string, message: string, _path: string) => {
   const _mockFile = `${_path}/${file}`;
 
   cy.get('[data-testid="menu-list-action"]').click();
-  cy.get('[data-testid="import-button"]').should("be.visible").click();
-  
-  cy.get('[data-testid="inputFile"]').selectFile(_mockFile, { force: true });
-  
+  cy.get("#import-button").should("be.visible").click();
+  cy.get('[data-testid="existantTemplate"]').click();
+  cy.get('input[type="file"]').selectFile(_mockFile, { force: true });
   cy.contains("Confirmer").click();
-  
   cy.contains(message).should("be.visible");
 };
 
