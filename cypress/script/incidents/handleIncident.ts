@@ -17,20 +17,10 @@ export async function handleIncident(
     API_KEY,
     COMPONENT_ID
   );
-  console.log("Current status:", status);
-  console.log("All incidents:", incident);
 
   if (status !== "OPERATIONAL") {
-    if (incident) {
-      await updateIncident(
-        incident.id,
-        INCIDENT_API_URL,
-        API_KEY,
-        COMPONENT_ID,
-        status
-      );
-    } else {
-      await createIncident(INCIDENT_API_URL, API_KEY, COMPONENT_ID, status);
+    if (!incident) {
+		await createIncident(INCIDENT_API_URL, API_KEY, COMPONENT_ID, status);
     }
   } else if (incident) {
     await resolveIncident(incident.id, INCIDENT_API_URL, API_KEY, COMPONENT_ID);

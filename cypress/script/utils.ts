@@ -1,4 +1,4 @@
-export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
+export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER" | "ADMIN") => {
   const credentials = {
     STUDENT: {
       email: "test+ryan@hei.school",
@@ -12,9 +12,13 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
       email: "test+manager1@hei.school",
       password: Cypress.env("CYPRESS_MANAGER1_PASSWORD"),
     },
+    ADMIN: {
+      email: "test+admin@hei.school",
+      password: Cypress.env("CYPRESS_ADMIN1_PASSWORD"),
+    },
   }[role];
 
-  cy.visit("https://preprod.admin.hei.school/login"); 
+  cy.visit("https://preprod.admin.hei.school/login");
 
   cy.get('[data-testid="casdoor-login-btn"]').click();
 
@@ -35,7 +39,7 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER") => {
   );
 
 
-  cy.get("h6.MuiTypography-root").should("contain.text", "Dashboard");
+  cy.contains("Dashboard").should("be.visible");
 
 };
 
