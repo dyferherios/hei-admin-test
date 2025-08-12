@@ -61,3 +61,10 @@ export const formatDateToString = (date: Date | string): string => {
   return date.toISOString().slice(0, 10);
 };
 
+
+export const loopTab = (list: string[]) => {
+  list.forEach((tab: string) => {
+    cy.contains(tab).should("be.visible")
+  })
+  cy.contains('[data-testid=letter-list-wrapper]').should("be.visible")
+}
