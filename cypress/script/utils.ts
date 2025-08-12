@@ -51,7 +51,7 @@ export const importFile = (file: string, message: string, _path: string) => {
   cy.get('[data-testid="existantTemplate"]').click();
   cy.get('input[type="file"]').selectFile(_mockFile, { force: true });
   cy.contains("Confirmer").click();
-  cy.contains(message).should("be.visible");
+  cy.contains(message).should("be.visible"); 
 };
 
 export const formatDateToString = (date: Date | string): string => {

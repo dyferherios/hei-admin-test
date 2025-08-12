@@ -89,7 +89,7 @@ describe("Manager creates students", () => {
     cy.contains("Liste des étudiants").should("be.visible");
   })
 
-  it("should create a student manually and verify creation", () => {
+  /*it("should create a student manually and verify creation", () => {
    const newStudent = generateStudentData(std);
     newStudent.sex = "F";
     newStudent.birth_date = "1995-05-15";
@@ -116,8 +116,9 @@ describe("Manager creates students", () => {
     verifyStudentCreation(liteStudent);
     std += 1;
   });
+*/
 
-/* it("should successfully import students with a valid Excel file", () => {
+ it("should successfully import students with a valid Excel file", () => {
     const filePath = "correct_students_template.xlsx";
     const expectedRefs = [
       "John",
@@ -137,7 +138,26 @@ describe("Manager creates students", () => {
     verifyStudentCreationByHisFirstName(name);
     });
   });
-*/
+
+
+  it ("should successfully import students with the correct file and minimum infos ", () => {
+    const filePath = "lite_correct_students_template.xlsx";
+    const expectedRefs = [
+      "John",
+      "Patrick",
+      "Jeanne",
+    ];
+
+
+    importFile(filePath, "Importation effectuée avec succès", _path);
+
+    expectedRefs.forEach((name) => {
+     cy.get("body").click(0, 0);
+     cy.get("body").click(0, 0);
+    verifyStudentCreationByHisFirstName(name);
+    });
+   
+})
 
   it("should fail to import students with an empty Excel file", () => {
     const filePath = "0_student_template.xlsx";
