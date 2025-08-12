@@ -68,3 +68,48 @@ export const loopTab = (list: string[]) => {
   })
   cy.contains('[data-testid=letter-list-wrapper]').should("be.visible")
 }
+
+export const verifyColorChangeOnClick = (
+  selector: string,
+  options: {
+    cssProperty?: string; // e.g., 'color', 'fill'
+    waitTime?: number; // Optional: wait for async updates
+    containerSelector?: string; // Optional: parent container
+  } = {}
+) => {
+  const { cssProperty = "color", waitTime = 0, containerSelector } = options;
+
+  // Locate the element
+  const element = containerSelector
+    ? cy.get(containerSelector).find(selector)
+    : cy.get(selector);
+
+  // Get initial color
+  element
+    .should("be.visible")
+    .invoke("css", cssProperty)
+    .then((initialColor) => {
+      cy.log(`Initial ${cssProperty}: ${initialColor}`);
+
+      // Click the element
+      element.click();
+
+      // Wait if specified
+      if (waitTime > 0) {
+        cy.wait(waitTime);
+      }
+
+      // Verify color change
+      element
+        .should("be.visible")
+        .invoke("css", cssProperty)
+        .then((newColor) => {
+          cy.log(`New ${cssProperty}: ${newColor}`);
+          // Assert color has changed
+          expect(newColor).to.not.eq(
+            initialColor,
+            `Expected ${cssProperty} to change, but it remained ${initialColor}`
+          );
+        });
+    });
+};
