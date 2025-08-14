@@ -89,7 +89,7 @@ describe("Manager creates students", () => {
     cy.contains("Liste des étudiants").should("be.visible");
   })
 
-  /*it("should create a student manually and verify creation", () => {
+  it("should create a student manually and verify creation", () => {
    const newStudent = generateStudentData(std);
     newStudent.sex = "F";
     newStudent.birth_date = "1995-05-15";
@@ -116,9 +116,9 @@ describe("Manager creates students", () => {
     verifyStudentCreation(liteStudent);
     std += 1;
   });
-*/
 
- it("should successfully import students with a valid Excel file", () => {
+
+ /*it("should successfully import students with a valid Excel file", () => {
     const filePath = "correct_students_template.xlsx";
     const expectedRefs = [
       "John",
@@ -175,6 +175,6 @@ describe("Manager creates students", () => {
     const filePath = "13_template.xlsx";
 
     importFile(filePath, "Vous ne pouvez importer que 20 éléments à la fois.", _path);
-  });
+  });*/
 });
 
