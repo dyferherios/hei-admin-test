@@ -18,12 +18,14 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.1.0",
     "@types/node-fetch": "^2.6.12",
+    "@types/xlsx": "^0.0.35",
     "cypress": "^14.5.2",
     "dotenv": "^17.2.1",
     "node-fetch": "^3.3.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "xlsx": "^0.18.5"
   },
   "dependencies": {
     "fast-glob": "^3.3.3",
