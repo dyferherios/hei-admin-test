@@ -1,77 +1,12 @@
-# name: Run Tests
-
-# on:
-#   push:
-#     branches: [ main ]
-#   schedule:
-#     - cron: "0 6 * * *"
-#     - cron: "0 14 * * *"
-#     - cron: "0 22 * * *"
-
-# env:
-#   CYPRESS_STUDENT1_PASSWORD: ${{ secrets.CYPRESS_STUDENT1_PASSWORD }}
-#   CYPRESS_TEACHER1_PASSWORD: ${{ secrets.CYPRESS_TEACHER1_PASSWORD }}
-#   CYPRESS_MANAGER1_PASSWORD: ${{ secrets.CYPRESS_MANAGER1_PASSWORD }}
-#   CYPRESS_ADMIN1_PASSWORD: ${{ secrets.CYPRESS_ADMIN1_PASSWORD }}
-#   STATUS_PAGE_ID: ${{ vars.STATUS_PAGE_ID }}
-#   API_KEY: ${{ secrets.API_KEY }}
-#   INCIDENT_API_URL: ${{ vars.INCIDENT_API_URL }}
-#   AUTHENTIFICATION_COMPONENT_ID: ${{ vars.AUTHENTIFICATION_COMPONENT_ID }}
-#   ATTENDANCE_COMPONENT_ID: ${{ vars.ATTENDANCE_COMPONENT_ID }}
-#   IMPORT_STUDENTS_COMPONENT_ID: ${{ vars.IMPORT_STUDENTS_COMPONENT_ID }}
-#   PAYEMENT_COMPONENT_ID: ${{ vars.PAYEMENT_COMPONENT_ID }}
-#   STUDENT_GROUPS_COMPONENT_ID: ${{ vars.STUDENT_GROUPS_COMPONENT_ID }}
-#   DASHBOARD_COMPONENT_ID: ${{ vars.DASHBOARD_COMPONENT_ID }}
-#   REACT_APP_CASDOOR_SDK_SERVER_URL: ${{ secrets.REACT_APP_CASDOOR_SDK_SERVER_URL }}
-#   REACT_APP_CASDOOR_SDK_CLIENT_ID: ${{ secrets.REACT_APP_CASDOOR_SDK_CLIENT_ID }}
-#   REACT_APP_CASDOOR_SDK_APP_NAME: ${{ secrets.REACT_APP_CASDOOR_SDK_APP_NAME }}
-#   REACT_APP_CASDOOR_SDK_ORGANIZATION_NAME: ${{ secrets.REACT_APP_CASDOOR_SDK_ORGANIZATION_NAME }}
-#   REACT_APP_CASDOOR_SDK_REDIRECT_PATH: ${{ secrets.REACT_APP_CASDOOR_SDK_REDIRECT_PATH }}
-
-# jobs:
-#   cypress-run:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
-
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: '20'
-
-#       - name: Install dependencies
-#         run: npm ci
-
-#       - name: Install ts-node globally
-#         run: npm install -g ts-node typescript
-
-#       - name: Run Cypress tests
-#         run:  npm run test
-
-#       - name: Upload Cypress screenshots on failure
-#         if: failure()
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: cypress-screenshots
-#           path: cypress/screenshots
-
-#       - name: Upload Cypress videos
-#         if: always()
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: cypress-videos
-#           path: cypress/videos
-
-
 name: Run Tests
 
 on:
   push:
-    branches: [ '**', '!main' ]
-  pull_request:
-    branches: [ '**' ]
+    branches: [ dyferherios ]
+  schedule:
+    - cron: "0 6 * * *"
+    - cron: "0 14 * * *"
+    - cron: "0 22 * * *"
 
 env:
   CYPRESS_STUDENT1_PASSWORD: ${{ secrets.CYPRESS_STUDENT1_PASSWORD }}
@@ -93,13 +28,13 @@ env:
   REACT_APP_CASDOOR_SDK_ORGANIZATION_NAME: ${{ secrets.REACT_APP_CASDOOR_SDK_ORGANIZATION_NAME }}
   REACT_APP_CASDOOR_SDK_REDIRECT_PATH: ${{ secrets.REACT_APP_CASDOOR_SDK_REDIRECT_PATH }}
   TERM: xterm
-  DISPLAY: ":99"
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -110,32 +45,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Xvfb and Chrome dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb libgbm-dev
+      - name: Install ts-node globally
+        run: npm install -g ts-node typescript
 
-      - name: Start Xvfb
-        run: Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+      - name: Run Cypress tests
+        run:  npm run test
 
-      - name: Run Cypress with Chrome flags
-        run: |
-          export DISPLAY=:99
-          npx cypress run \
-            --browser chrome \
-            --config "chromeWebSecurity=false,video=false" \
-            --env TERM=xterm
-
-      - name: Upload screenshots
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-
-      - name: Upload videos
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-videos
-          path: cypress/videos
