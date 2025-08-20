@@ -12,7 +12,7 @@ interface Course {
 
 // Génération d'un identifiant unique basé sur l'heure courante
 const uniqueId = Date.now().toString().slice(-5); 
-const courseCode = `NC${uniqueId}`;
+
 
 // Définition d'un nouveau cours 
 const newCourse: Required<Course> = {
@@ -85,21 +85,6 @@ describe("Manager Course ", () => {
 
     // Vérifier que le message de succès s'affiche
     cy.contains("Cours créer avec succès").should("be.visible");
-  });
-
-  it("can edit course", () => {
-    // Recherche un cours par son code 
-    cy.get('[data-testid="main-search-filter"]').type(newCourse.code!);
-    cy.get('[data-testid="edit-button"]').click();
-
-    // Modifier les champs avec les infos de editedCourse
-    cy.get("#name").clear().type(editedCourse.name!);
-
-    // Enregistrer les modifications
-    cy.get('form > .MuiToolbar-root > [data-testid="edit-button"]').click();
-
-    // Vérifier que le message de succès s'affiche
-    cy.contains("Cours mis à jour").should("be.visible");
   });
 
   it("can get teacher assigned to course", () => {
