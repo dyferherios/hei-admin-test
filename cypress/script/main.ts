@@ -48,6 +48,8 @@ export const main = async () => {
     }
   }
 
+  // process.exit(hasFailures ? 1 : 0);
 };
 
 main();
+

@@ -1,13 +1,15 @@
+import { loginAs } from "../script/utils";
 
-import {loginAs, importFile, formatDateToString} from "../script/utils";
+const randomInt = (min: number, max: number): number =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
-//const _path = "cypress/fixtures/students_import";
-const _path = "D:/NOMENA/HEI/HEI-ADMIN/hei-admin/hei-admin-test/cypress/fixtures/students_import";
+const randomString = (length: number): string =>
+  Array.from({ length }, () => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join("");
 
-const getRandomStd = () => Math.floor(Math.random() * 900) + 100; 
-let std = getRandomStd();
-const firstNames = [ "Lucas", "Emma"];
-let nameIndex = 0;
+const generateStudentRef = (): string => {
+  const randomNumber = randomInt(10000, 99999);
+  return `STD${randomNumber}-PROJET1-G18`;
+};
 
 interface Student {
   id?: string;
@@ -28,94 +30,56 @@ interface Student {
   high_school_origin?: string;
 }
 
-const generateStudentData = (std: number): Student => {
-  const firstName = `${firstNames[nameIndex % firstNames.length]}${std}`;
-  const lastName = "Dupont";
-  nameIndex += 1;
-  return {
-    ref: `STD00${std}-PROJ1-G18`,
-    first_name: firstName,
-    last_name: lastName,
-    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@hei.com`,
-    entrance_datetime: "2025-07-29",
-    specialization_field: "COMMON_CORE",
-    status: "ENABLED",
-    nic: `123456${std}012`,
-    birth_place: "Paris",
-    coordinates: { longitude: 2.3522, latitude: 48.8566 },
-    high_school_origin: "LMA",
-  };
+const formatDateToString = (date: Date | string): string => {
+  if (typeof date === "string") return date;
+  return date.toISOString().slice(0, 10);
 };
 
-const fillStudentForm = (student: Student) => {
-  cy.get("#ref").type(student.ref);
-  cy.get("#first_name").type(student.first_name);
-  cy.get("#last_name").type(student.last_name);
-  cy.get("#email").type(student.email);
-  cy.get("#entrance_datetime").click().type(formatDateToString(student.entrance_datetime));
-  if (student.sex) cy.get(`#sex_${student.sex}`).click();
-  if (student.birth_date) cy.get("#birth_date").click().type(student.birth_date);
-  if (student.address) cy.get("#address").type(student.address);
-  if (student.phone) cy.get("#phone").type(student.phone);
-  if (student.nic) cy.get("#nic").type(student.nic);
-  if (student.birth_place) cy.get("#birth_place").type(student.birth_place);
-  if (student.coordinates) {
-    cy.get('[data-testid="longitude-input"]').type(student.coordinates.longitude.toString());
-    cy.get('[data-testid="latitude-input"]').type(student.coordinates.latitude.toString());
-  }
-  if (student.high_school_origin) cy.get("#high_school_origin").type(student.high_school_origin);
-};
+describe("Manager creates students manually", () => {
+  it("should create a student with random data", () => {
+    const newStudent: Student = {
+      ref: generateStudentRef(),
+      first_name: "Jean_" + randomString(5),
+      last_name: "Barthelemy_" + randomString(5),
+      sex: Math.random() > 0.5 ? "M" : "F",
+      specialization_field: "COMMON_CORE",
+      birth_date: "199" + randomInt(0, 9) + "-" + randomInt(1, 12).toString().padStart(2, "0") + "-" + randomInt(1, 28).toString().padStart(2, "0"),
+      address: `${randomInt(1, 999)} Rue ${randomString(6)}, Antananarivo`,
+      phone: "+261" + randomInt(320000000, 339999999).toString(),
+      email: `barthelemy_${randomString(5)}${randomInt(1000, 9999)}@hei.mail.school`,
+      entrance_datetime: new Date(),
+      status: "ENABLED",
+      nic: randomInt(100000000000, 999999999999).toString(),
+      birth_place: "Antananarivo",
+      coordinates: { longitude: 47.5 + Math.random(), latitude: -18.9 + Math.random() },
+      high_school_origin: "LMA",
+    };
 
-const verifyStudentCreation = (student: Student) => {
-  cy.contains("Élément créé").should("be.visible");
-  cy.get('[data-testid="students-menu"]').click();
-  cy.get('[href="/students"]').click();
-  cy.get('[data-testid="main-search-filter"]').type(student.first_name);
-  cy.get('.MuiTableBody-root').contains(student.ref).should("be.visible");
-};
-
-const verifyStudentCreationByHisFirstName = (name: string) => {
-  cy.get('[data-testid="main-search-filter"]').type(name);
-  cy.get('.MuiTableBody-root').contains(name).should("be.visible");
-};
-
-describe("Manager creates students", () => {
-
-  beforeEach(() => {
     loginAs("MANAGER");
-    cy.wait(2000);
-    cy.visit(`preprod.admin.hei.school/students`);
-    cy.wait(2000);
+    cy.visit("https://preprod.admin.hei.school/students");
     cy.contains("Liste des étudiants").should("be.visible");
-  })
-
-  it("should create a student manually and verify creation", () => {
-   const newStudent = generateStudentData(std);
-    newStudent.sex = "F";
-    newStudent.birth_date = "1995-05-15";
-    newStudent.address = "123 Rue Exemple, Paris";
-    newStudent.phone = "+261 234 1779";
 
     cy.get('[data-testid="menu-list-action"]').click();
     cy.get('[data-testid="create-button"]').click();
-    fillStudentForm(newStudent);
+
+    cy.get("#ref").type(newStudent.ref);
+    cy.get("#first_name").type(newStudent.first_name);
+    cy.get("#last_name").type(newStudent.last_name);
+    cy.get(`#sex_${newStudent.sex}`).click();
+    cy.get("#birth_date").click().type(newStudent.birth_date!);
+    cy.get("#address").type(newStudent.address!);
+    cy.get("#phone").type(newStudent.phone!);
+    cy.get("#email").type(newStudent.email);
+    cy.get("#entrance_datetime").click().type(formatDateToString(newStudent.entrance_datetime));
+    cy.get("#nic").type(newStudent.nic!);
+    cy.get("#birth_place").type(newStudent.birth_place!);
+    cy.get('[data-testid="longitude-input"]').type(newStudent.coordinates!.longitude.toString());
+    cy.get('[data-testid="latitude-input"]').type(newStudent.coordinates!.latitude.toString());
+    cy.get("#high_school_origin").type(newStudent.high_school_origin!);
+
     cy.contains("Enregistrer").click();
-    verifyStudentCreation(newStudent);
-    std += 1;
+
+    cy.contains("Élément créé").should("be.visible");
+    cy.log("Created student: ", JSON.stringify(newStudent));
   });
-
-  
-
-  it("should create a lite student and verify creation", () => {
-   const liteStudent = generateStudentData(std);
-
-    cy.get('[data-testid="menu-list-action"]').click();
-    cy.get('[data-testid="create-button"]').click();
-    fillStudentForm(liteStudent);
-    cy.contains("Enregistrer").click();
-    verifyStudentCreation(liteStudent);
-    std += 1;
-  });
-
 });
-

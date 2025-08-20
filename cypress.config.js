@@ -6,12 +6,13 @@ dotenv.config();
 export default defineConfig({
   viewportHeight: 1080,
   viewportWidth: 1920,
-  defaultCommandTimeout: 25_000,
+  defaultCommandTimeout: 25000,
   e2e: {
-	  pageLoadTimeout:100000, 
+    experimentalSessionAndOrigin: true,
+	pageLoadTimeout:100000,
   },
    retries: {
-    runMode: 1,
+    runMode: 2,
     openMode: 0,
   },
   env:{

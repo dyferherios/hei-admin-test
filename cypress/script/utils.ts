@@ -38,7 +38,6 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER" | "ADMIN") => {
 
   );
 
-
   cy.contains("Dashboard").should("be.visible");
 
 };
@@ -51,13 +50,10 @@ export const importFile = (file: string, message: string, _path: string) => {
   cy.get('[data-testid="existantTemplate"]').click();
   cy.get('input[type="file"]').selectFile(_mockFile, { force: true });
   cy.contains("Confirmer").click();
-  cy.contains(message).should("be.visible"); 
+
+  cy.contains(message).should("be.visible");
 };
 
-export const formatDateToString = (date: Date | string): string => {
-  if (typeof date === "string") return date;
-  return date.toISOString().slice(0, 10);
-};
 
 export const loopTab = (list: string[]) => {
   list.forEach((tab: string) => {
@@ -65,4 +61,3 @@ export const loopTab = (list: string[]) => {
   })
   cy.contains('[data-testid=letter-list-wrapper]').should("be.visible")
 }
-
