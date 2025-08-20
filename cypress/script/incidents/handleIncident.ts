@@ -1,3 +1,4 @@
+import { log } from "console";
 import { determineStatus } from "../componentStatus/determineStatus";
 import { createIncident } from "./createIncident";
 import { getActiveIncident } from "./getActiveIncident";
@@ -19,10 +20,16 @@ export async function handleIncident(
   );
 
   if (status !== "OPERATIONAL") {
+	console.log(`Current status: ${status}`);
     if (!incident) {
+		console.log("No active incident found, creating a new one.");
 		await createIncident(INCIDENT_API_URL, API_KEY, COMPONENT_ID, status);
     }
   } else if (incident) {
+	console.log("Incident found, updating it to operational status.");
     await resolveIncident(incident.id, INCIDENT_API_URL, API_KEY, COMPONENT_ID);
+  }
+  else {
+	console.log("No active incident found, no action needed.");
   }
 }
