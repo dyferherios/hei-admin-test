@@ -18,7 +18,7 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER" | "ADMIN") => {
     },
   }[role];
 
-  cy.visit("https://preprod.admin.hei.school/login");
+  cy.visit("https://preprod.admin.hei.school/logins");
 
   cy.get('[data-testid="casdoor-login-btn"]').click();
 
