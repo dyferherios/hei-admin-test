@@ -2,7 +2,7 @@ import { loginAs } from "../script/utils";
 
 describe("Groups test", () => {
   it("Groups List is visible", () => {
-	// Connect as an admin
+	// Connect en tant qu'admin
 	loginAs("ADMIN");
 
 	// Naviguer vers la page des groupes

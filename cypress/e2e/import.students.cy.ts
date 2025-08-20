@@ -84,7 +84,7 @@ describe("Manager creates students", () => {
   beforeEach(() => {
     loginAs("MANAGER");
     cy.wait(2000);
-    cy.visit(`${Cypress.env('CYPRESS_BASE_URL')}/students`);
+    cy.visit(`https://preprod.admin.hei.school/students`);
     cy.wait(2000);
     cy.contains("Liste des étudiants").should("be.visible");
   })
