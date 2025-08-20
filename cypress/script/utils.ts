@@ -55,3 +55,10 @@ export const importFile = (file: string, message: string, _path: string) => {
   cy.contains(message).should("be.visible");
 };
 
+
+export const loopTab = (list: string[]) => {
+  list.forEach((tab: string) => {
+    cy.contains(tab).should("be.visible")
+  })
+  cy.contains('[data-testid=letter-list-wrapper]').should("be.visible")
+}

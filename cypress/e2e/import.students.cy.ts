@@ -35,7 +35,7 @@ const formatDateToString = (date: Date | string): string => {
   return date.toISOString().slice(0, 10);
 };
 
-describe("Manager creates students", () => {
+describe("Manager creates students manually", () => {
   it("should create a student with random data", () => {
     const newStudent: Student = {
       ref: generateStudentRef(),
