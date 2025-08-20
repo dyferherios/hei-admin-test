@@ -1,7 +1,2 @@
 .env
 node_modules
-<<<<<<< HEAD
-cypress/screenshots
-=======
-cypress/screenshots
->>>>>>> noums

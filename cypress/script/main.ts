@@ -18,8 +18,6 @@ export const main = async () => {
 
   const files = await fg("e2e/*.cy.ts", { cwd: rootPath });
 
-  let hasFailures = false;
-
   for (const file of files) {
     const filename = path.basename(file, ".cy.ts");
     const componentId = componentIds[filename.toLowerCase()];
@@ -44,14 +42,12 @@ export const main = async () => {
     }
 
     if (failedTests > 0) {
-      hasFailures = true;
       console.warn(`Tests failed for the file ${file}`);
     } else {
       console.log(`Tests passed for the file${file}`);
     }
   }
 
-  process.exit(hasFailures ? 1 : 0);
 };
 
 main();

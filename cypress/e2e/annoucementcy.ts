@@ -1,4 +1,4 @@
-import { loginAs, verifyColorChangeOnClick } from "../script/utils";
+import { loginAs } from "../script/utils";
 import { loopTab } from "../script/utils";
 
 const list = {
@@ -23,14 +23,9 @@ describe("annoucement test", () => {
     cy.contains(list.admin_tab[0]).click();
     cy.contains('[class="MuiTypography-root"]').should("be.visible")
     cy.get('.MuiTypographie-root').children().first().click();
-    cy.contains("Tout le monde").should("be.visible")
-    verifyColorChangeOnClick('[data-testid="ThumbUpOffAltIcon"]');
-    verifyColorChangeOnClick('[data-testid="ThumbUpOffAltIcon"]', {
-      cssProperty: "fill",
-      waitTime: 1000,
-      containerSelector: ".post-container",
-    });
-    
+    cy.contains('[id="reaction"]').should("be.visble").click();
+    cy.contains("Réaction mise à jour avec succès").should("be.visible");
+    cy.contains('[id="reaction"]').should("be.visible").click();
   });
 
   it("connect as a teacher", () => {
@@ -40,17 +35,26 @@ describe("annoucement test", () => {
     cy.contains('[class=MuiTypography-root]').should("be.visible")
     cy.get(".MuiTypography-root").children().eq(1).click()
     cy.contains("Tout le monde").should("be.visible")
-    verifyColorChangeOnClick('[data-testid="ThumbUpOffAltIcon"]');
-    verifyColorChangeOnClick('[data-testid="ThumbUpOffAltIcon"]', {
-      cssProperty: "fill",
-      waitTime: 1000,
-      containerSelector: ".post-container",
-    });
+    cy.contains('[id="reaction"]').should("be.visble").click();
+    cy.contains("Réaction mise à jour avec succès").should("be.visible");
+    cy.contains('[id="reaction"]').should("be.visible").click();
   });
-  // it("connect as a student", () => {
-  // loginAs("STUDENT");
-  // }),
-  // it("connect as a manager", () => {
-  //     loginAs("MANAGER");
-    // });
+  it("connect as a student", () => {
+    loginAs("STUDENT");
+    cy.contains('[class=MuiTypography-root]').should("be.visible")
+    cy.get(".MuiTypography-root").children().eq(1).click()
+    cy.contains("Tout le monde").should("be.visible")
+    cy.contains('[id="reaction"]').should("be.visble").click();
+    cy.contains("Réaction mise à jour avec succès").should("be.visible");
+    cy.contains('[id="reaction"]').should("be.visible").click();
+  }),
+  it("connect as a manager", () => {
+    loginAs("MANAGER");
+    cy.contains("[class=MuiTypography-root]").should("be.visible");
+    cy.get(".MuiTypography-root").children().eq(1).click();
+    cy.contains("Tout le monde").should("be.visible");
+    cy.contains('[id="reaction"]').should("be.visble").click();
+    cy.contains("Réaction mise à jour avec succès").should("be.visible");
+    cy.contains('[id="reaction"]').should("be.visible").click();
+    });
 })
