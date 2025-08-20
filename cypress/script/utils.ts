@@ -18,7 +18,7 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER" | "ADMIN") => {
     },
   }[role];
 
-  cy.visit("https://preprod.admin.hei.school/logins");
+  cy.visit("https://preprod.admin.hei.school/login");
 
   cy.get('[data-testid="casdoor-login-btn"]').click();
 
@@ -39,7 +39,7 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER" | "ADMIN") => {
   );
 
 
-  cy.contains("Dashboard").should("be.visible");
+  cy.contains("Dashboards").should("be.visible");
 
 };
 
