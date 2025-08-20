@@ -38,7 +38,6 @@ export const loginAs = (role: "STUDENT" | "TEACHER" | "MANAGER" | "ADMIN") => {
 
   );
 
-
   cy.contains("Dashboard").should("be.visible");
 
 };
