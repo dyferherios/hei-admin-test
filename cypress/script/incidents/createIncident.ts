@@ -1,13 +1,10 @@
-export async function createIncident(INCIDENT_API_URL: string, API_KEY: string, COMPONENT_ID: string, STATUS: string) {
-  const resComponent = await fetch(`https://api.instatus.com/v1/components/${COMPONENT_ID}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    }
-  })
-  const component = await resComponent.json();
-  const componentName = component.name;
+export async function createIncident(INCIDENT_API_URL: string, API_KEY:string, COMPONENT_ID: string, STATUS: string) {
+  const impactMap = {
+    DEGRADEDPERFORMANCE: "minor",
+    PARTIALOUTAGE: "major",
+    MAJOROUTAGE: "critical",
+  };
+
   const res = await fetch(INCIDENT_API_URL, {
     method: "POST",
     headers: {
@@ -15,8 +12,8 @@ export async function createIncident(INCIDENT_API_URL: string, API_KEY: string, 
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: `Incident detected - ${STATUS}`,
-      message: `The component ${componentName} affected with ${STATUS}.`,
+      name: `Incident détecté - ${STATUS}`,
+      message: `Composant affecté avec le statut ${STATUS}.`,
       components: [COMPONENT_ID],
       status: "INVESTIGATING",
       notify: true,
@@ -31,7 +28,7 @@ export async function createIncident(INCIDENT_API_URL: string, API_KEY: string, 
 
   if (!res.ok) {
     const errorText = await res.text();
-    throw new Error(`Error while creating incident : ${errorText}`);
+    throw new Error(`Erreur création incident : ${errorText}`);
   }
 
   return await res.json();
