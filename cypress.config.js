@@ -8,11 +8,10 @@ export default defineConfig({
   viewportWidth: 1920,
   defaultCommandTimeout: 25_000,
   e2e: {
-    experimentalSessionAndOrigin: true,
-	pageLoadTimeout:100000,
+	  pageLoadTimeout:100000, 
   },
    retries: {
-    runMode: 4,
+    runMode: 1,
     openMode: 0,
   },
   env:{
