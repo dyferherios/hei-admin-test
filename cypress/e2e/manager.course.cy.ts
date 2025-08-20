@@ -24,16 +24,6 @@ const newCourse: Required<Course> = {
   id: "",
 };
 
-// Définition d'un cours modifié 
-const editedCourse: Required<Course> = {
-  name: `Cours Modifié ${uniqueId}`,
-  code: `Test${uniqueId}`,
-  credits: 4,
-  level: "L2",
-  total_hours: 40,
-  id: "",
-};
-
 describe("Manager Course ", () => {
   beforeEach(() => {
     // Connexion en tant que MANAGER
