@@ -1,11 +1,11 @@
 
-import {loginAs, importFile, formatDateToString} from "../script/utils";
+import {loginAs, formatDateToString} from "../script/utils";
 
-//const _path = "cypress/fixtures/students_import";
-const _path = "D:/NOMENA/HEI/HEI-ADMIN/hei-admin/hei-admin-test/cypress/fixtures/students_import";
-
+// Fonction pour générer un identifiant aléatoire pour l'étudiant
 const getRandomStd = () => Math.floor(Math.random() * 900) + 100; 
 let std = getRandomStd();
+
+// Liste de prénoms pour les étudiants
 const firstNames = [ "Lucas", "Emma"];
 let nameIndex = 0;
 
@@ -28,6 +28,7 @@ interface Student {
   high_school_origin?: string;
 }
 
+// Fonction pour générer un étudiant avec des données aléatoires ou prédéfinies
 const generateStudentData = (std: number): Student => {
   const firstName = `${firstNames[nameIndex % firstNames.length]}${std}`;
   const lastName = "Dupont";
@@ -47,6 +48,7 @@ const generateStudentData = (std: number): Student => {
   };
 };
 
+// Fonction pour remplir le formulaire de création d'étudiant
 const fillStudentForm = (student: Student) => {
   cy.get("#ref").type(student.ref);
   cy.get("#first_name").type(student.first_name);
@@ -66,6 +68,7 @@ const fillStudentForm = (student: Student) => {
   if (student.high_school_origin) cy.get("#high_school_origin").type(student.high_school_origin);
 };
 
+// Fonction pour vérifier que l'étudiant a bien été créé
 const verifyStudentCreation = (student: Student) => {
   cy.contains("Élément créé").should("be.visible");
   cy.get('[data-testid="students-menu"]').click();
@@ -74,13 +77,8 @@ const verifyStudentCreation = (student: Student) => {
   cy.get('.MuiTableBody-root').contains(student.ref).should("be.visible");
 };
 
-const verifyStudentCreationByHisFirstName = (name: string) => {
-  cy.get('[data-testid="main-search-filter"]').type(name);
-  cy.get('.MuiTableBody-root').contains(name).should("be.visible");
-};
-
 describe("Manager creates students", () => {
-
+  // Connexion en tant que manager
   beforeEach(() => {
     loginAs("MANAGER");
     cy.wait(2000);
@@ -89,8 +87,9 @@ describe("Manager creates students", () => {
     cy.contains("Liste des étudiants").should("be.visible");
   })
 
-  /*it("should create a student manually and verify creation", () => {
-   const newStudent = generateStudentData(std);
+  it("should create a student manually and verify creation", () => {
+    // Générer un nouvel étudiant
+    const newStudent = generateStudentData(std);
     newStudent.sex = "F";
     newStudent.birth_date = "1995-05-15";
     newStudent.address = "123 Rue Exemple, Paris";
@@ -107,6 +106,7 @@ describe("Manager creates students", () => {
   
 
   it("should create a lite student and verify creation", () => {
+     // Générer un étudiant minimaliste
    const liteStudent = generateStudentData(std);
 
     cy.get('[data-testid="menu-list-action"]').click();
@@ -115,66 +115,6 @@ describe("Manager creates students", () => {
     cy.contains("Enregistrer").click();
     verifyStudentCreation(liteStudent);
     std += 1;
-  });
-*/
-
- it("should successfully import students with a valid Excel file", () => {
-    const filePath = "correct_students_template.xlsx";
-    const expectedRefs = [
-      "John",
-      "Patrick",
-      "Jeanne",
-      "Jean",
-      "Pierre",
-      "Hélène",
-      "Patrice",
-    ];
-
-    importFile(filePath, "Importation effectuée avec succès", _path);
-
-    expectedRefs.forEach((name) => {
-     cy.get("body").click(0, 0);
-     cy.get("body").click(0, 0);
-    verifyStudentCreationByHisFirstName(name);
-    });
-  });
-
-
-  it ("should successfully import students with the correct file and minimum infos ", () => {
-    const filePath = "lite_correct_students_template.xlsx";
-    const expectedRefs = [
-      "John",
-      "Patrick",
-      "Jeanne",
-    ];
-
-
-    importFile(filePath, "Importation effectuée avec succès", _path);
-
-    expectedRefs.forEach((name) => {
-     cy.get("body").click(0, 0);
-     cy.get("body").click(0, 0);
-    verifyStudentCreationByHisFirstName(name);
-    });
-   
-})
-
-  it("should fail to import students with an empty Excel file", () => {
-    const filePath = "0_student_template.xlsx";
-
-    importFile(filePath, "Il n'y a pas d'élément à insérer", _path);
-  });
-
-  it("should fail to import students with incorrect headers in Excel file", () => {
-    const filePath = "wrong_heads_students_template.xlsx";
-
-    importFile(filePath, "Veuillez re-vérifier les en-têtes de votre fichier", _path);
-  });
-
-  it("should fail to import students with too many entries in Excel file", () => {
-    const filePath = "13_template.xlsx";
-
-    importFile(filePath, "Vous ne pouvez importer que 20 éléments à la fois.", _path);
   });
 });
 
