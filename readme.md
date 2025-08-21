@@ -6,6 +6,9 @@ Il permet de valider les fonctionnalités principales de l’interface utilisate
 
 ---
 
+![Capture de heiadmin instatus page](./public/instatusView.png)
+
+
 ## 🛠️ Stack Technique
 - **[Cypress](https://www.cypress.io/)** → Framework de test E2E.
 - **JavaScript (ES6)** → Langage utilisé pour écrire les tests.
@@ -43,3 +46,4 @@ npx cypress open
 ```
 npm run test
 ```
+
