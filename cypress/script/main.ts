@@ -47,8 +47,6 @@ export const main = async () => {
       console.log(`Tests passed for the file${file}`);
     }
   }
-
-  // process.exit(hasFailures ? 1 : 0);
 };
 
 main();

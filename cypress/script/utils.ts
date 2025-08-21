@@ -47,5 +47,5 @@ export const loopTab = (list: string[]) => {
   list.forEach((tab: string) => {
     cy.contains(tab).should("be.visible")
   })
-  cy.contains('[data-testid=letter-list-wrapper]').should("be.visible")
+  cy.get('[data-testid="letter-list-wrapper"]').should("be.visible");
 }
