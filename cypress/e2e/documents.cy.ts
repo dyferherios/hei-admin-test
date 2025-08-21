@@ -9,10 +9,10 @@ describe("Manager Documents Tests", () => {
 
     cy.origin("https://owncloud.hei.school", () => {
       const selectors = {
-        newButton: 'a.button.new',
-        createButton: 'form.filenameform .create',
-        actionMenu: '.action-menu',
-        filenameInput: 'input.filename',
+        newButton: "a.button.new",
+        createButton: "form.filenameform .create",
+        actionMenu: ".action-menu",
+        filenameInput: "input.filename",
       };
 
       const createFolder = (folderName = "New folder") => {
@@ -42,9 +42,9 @@ describe("Manager Documents Tests", () => {
           .closest("a.name")
           .find(selectors.actionMenu)
           .click();
-        cy.get('.popovermenu.menu')
-          .contains('Delete')
-          .should('be.visible')
+        cy.get(".popovermenu.menu")
+          .contains("Delete")
+          .should("be.visible")
           .click();
         cy.contains(folderName).should("not.exist");
       };
