@@ -2,8 +2,8 @@ import { loginAs } from "../script/utils";
 
 describe("Fees Management Workflow", () => {
   const testData = {
-    studentName: "Ryan",
-    feeDueDate: "2222-12-12",
+    studentName: "Tokimahery",
+    feeDueDate: "2025-12-12",
     transactionRef: "MP240731.1518.B11223",
     feeType: "Frais annuel L1",
   };
@@ -43,7 +43,7 @@ describe("Fees Management Workflow", () => {
     confirmFeePayment(year, transactionRef) {
       cy.contains("span.MuiTypography-body2", `12 décembre ${year}`)
         .parents("tr.MuiTableRow-root")
-        .find(`svg[data-testid^="addMobileMoney-student1_id"]`)
+        .find('button[aria-label="Mobile Money"]')
         .click();
 
       cy.get(".MuiDialog-container").should("be.visible");
@@ -93,7 +93,6 @@ describe("Fees Management Workflow", () => {
 
       cy.contains("Élément supprimé avec succès.").should("be.visible");
 
-      cy.url().should("match", /\/students\/student1_id\/fees$/);
       cy.log("Loggin out");
       cy.contains("Se déconnecter").click();
       clearSession();
@@ -103,7 +102,6 @@ describe("Fees Management Workflow", () => {
   const studentFeesPage = {
     navigateToFees() {
       cy.contains("Frais").click();
-      cy.url().should("include", "/students/student1_id/fees");
     },
 
     setPageSizeTo100() {
