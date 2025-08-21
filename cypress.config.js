@@ -12,7 +12,7 @@ export default defineConfig({
 	pageLoadTimeout:100000,
   },
    retries: {
-    runMode: 1,
+    runMode: 4,
     openMode: 0,
   },
   env:{

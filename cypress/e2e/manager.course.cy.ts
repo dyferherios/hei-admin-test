@@ -36,7 +36,7 @@ describe("Manager Course ", () => {
     // Attente supplémentaire pour le rendu
     cy.wait(2000);
 
-    // Vérifier que la liste des cours est affichée
+    // Vérifier que la liste des cours est affichée 
     cy.contains("Liste de cours").should("be.visible");
   });
 
