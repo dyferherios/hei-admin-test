@@ -36,7 +36,7 @@ export const main = async () => {
 
 
     try {
-      await handleIncident(incidentApiUrl, apiKey, componentId, failedTests, totalTests);
+      await handleIncident(incidentApiUrl, apiKey, componentId, filename, failedTests, totalTests);
     } catch (err) {
       console.error(`Error incident to ${componentId}:`, err);
     }

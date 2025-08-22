@@ -9,6 +9,7 @@ export async function handleIncident(
   INCIDENT_API_URL: string,
   API_KEY: string,
   COMPONENT_ID: string,
+  filename: string,
   failedTests: any,
   totalTests: any
 ) {
@@ -23,7 +24,7 @@ export async function handleIncident(
 	console.log(`Current status: ${status}`);
     if (!incident) {
 		console.log("No active incident found, creating a new one.");
-		await createIncident(INCIDENT_API_URL, API_KEY, COMPONENT_ID, status);
+		await createIncident(INCIDENT_API_URL, API_KEY, COMPONENT_ID, filename, status);
     }
   } else if (incident) {
 	console.log("Incident found, updating it to operational status.");
