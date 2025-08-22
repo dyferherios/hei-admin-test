@@ -57,7 +57,7 @@ describe("Manager creates students manually", () => {
 
     loginAs("MANAGER");
     cy.visit("https://preprod.admin.hei.school/students");
-    cy.contains("Liste des étudiantss").should("be.visible");
+    cy.contains("Liste des étudiants").should("be.visible");
 
     cy.get('[data-testid="menu-list-action"]').click();
     cy.get('[data-testid="create-button"]').click();
